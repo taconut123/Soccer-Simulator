@@ -22,7 +22,7 @@
             margin-top: 1%;
             margin-left: 1%;
             margin-bottom: 10px;
-            width: 300px;
+            width: 450px;
             height: calc(95%-10px);
             border: solid #191919 5px;
             text-align: center;
@@ -47,24 +47,58 @@
             font-size: x-small;
             width: fit-content;
             background-color: #FFFFFF;
+            border-radius: 10px;
         }
-        .team-container {
+        
+        .group-a-team-container{
             display: grid;
-            grid-template-columns: repeat(4,75px);
-            border-top: 1px solid #191919;
-            border-left: 1px solid #191919;
+            grid-template-columns: auto auto auto auto;            
         }
-        .team-container div {
-            height: fit-content;
-            border-right: 1px solid #191919;
-            border-bottom: 1px solid #191919;
-            height: 127px;
+        .group-a-team-container div {
+            width: 110.5px;
+            height: auto;
             font-size: 14px;
         }
+
+        .group-b-team-container{
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            border-top: 10px solid #191919;
+        }
+        .group-b-team-container div {
+            width: 110.5px;
+            height: auto;
+            font-size: 14px;
+        }
+
         #strength-title {
             margin-bottom: 1px;
             margin-top: -2px;
         }
+        .team-card {
+            border: 1px solid #191919;
+            width: 120px;
+            height: 100px;
+        }
+        .strength {
+            border-right: none;
+            margin-top: -10px;
+        }
+        .delgation-buttons{
+            display: grid;
+            grid-template-columns: auto auto;
+            text-align: center;
+            justify-content: center;
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+        .delgation{
+            background-color: lightgreen;    
+            width: fit-content;
+            height: auto;
+            display: flex;
+        }
+
         #simulate-match {
             display: flex;
             justify-content: center;
@@ -76,6 +110,7 @@
             width: 300px;
             font-size: xx-large;
         }
+
         #team-1-container {
             display:flex; 
             justify-content: flex-start;
@@ -101,6 +136,7 @@
         #match-display span {
             font-size: 55px;
         }
+
         #team-selection {
             display: flex;
             justify-content: space-around;
@@ -126,64 +162,302 @@
             width: 80px;
             font-size: small;
         }
+
     </style>
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
             <h1 id="strength-title">Strengths</h1>
-            <div class="team-container">
-                <div><p>Los Angeles Angels: <span id="Los_Angeles_Angels">66</span> <button onclick="gainStrength('Los_Angeles_Angels')">+ Strength</button><button onclick="loseStrength('Los_Angeles_Angels')">- Strength</button></p></div>
-
-                <div><p>Chicago Grizzlies: <span id="Chicago_Grizzlies">30</span> <button onclick="gainStrength('Chicago_Grizzlies')">+ Strength</button><button onclick="loseStrength('Chicago_Grizzlies')">- Strength</button></p></div>
-
-                <div><p>Houston Hungovers: <span id="Houston_Hungovers">97</span> <button onclick="gainStrength('Houston_Hungovers')">+ Strength</button><button onclick="loseStrength('Houston_Hungovers')">- Strength</button></p></div>
-
-                <div><p>Phoenix Phantoms: <span id="Phoenix_Phantoms">97</span> <button onclick="gainStrength('Phoenix_Phantoms')">+ Strength</button><button onclick="loseStrength('Phoenix_Phantoms')">- Strength</button></p></div>
-
-                <div><p>Philadelphia Photos: <span id="Philadelphia_Photos">76</span> <button onclick="gainStrength('Philadelphia_Photos')">+ Strength</button><button onclick="loseStrength('Philadelphia_Photos')">- Strength</button></p></div>
-
-                <div><p>San Antonio Sprouts: <span id="San_Antonio_Sprouts">52</span> <button onclick="gainStrength('San_Antonio_Sprouts')">+ Strength</button><button onclick="loseStrength('San_Antonio_Sprouts')">- Strength</button></p></div>
-
-                <div><p>San Diego Zoogoers: <span id="San_Diego_Zoogoers">30</span> <button onclick="gainStrength('San_Diego_Zoogoers')">+ Strength</button><button onclick="loseStrength('San_Diego_Zoogoers')">- Strength</button></p></div>
-
-                <div><p>Dallas Darts: <span id="Dallas_Darts">30</span> <button onclick="gainStrength('Dallas_Darts')">+ Strength</button><button onclick="loseStrength('Dallas_Darts')">- Strength</button></p></div>
-
-                <div><p>Jacksonville Jags: <span id="Jacksonville_Jags">79</span> <button onclick="gainStrength('Jacksonville_Jags')">+ Strength</button><button onclick="loseStrength('Jacksonville_Jags')">- Strength</button></p></div>
-
-                <div><p>San Jose Soccer Team: <span id="San_Jose_Soccer_Team">72</span> <button onclick="gainStrength('San_Jose_Soccer_Team')">+ Strength</button><button onclick="loseStrength('San_Jose_Soccer_Team')">- Strength</button></p></div>
-
-                <div><p>Charlotte Cows: <span id="Charlotte_Cows">92</span> <button onclick="gainStrength('Charlotte_Cows')">+ Strength</button><button onclick="loseStrength('Charlotte_Cows')">- Strength</button></p></div>
-
-                <div><p>Columbus Cant: <span id="Columbus_Cant">90</span> <button onclick="gainStrength('Columbus_Cant')">+ Strength</button><button onclick="loseStrength('Columbus_Cant')">- Strength</button></p></div>
-
-                <div><p>Indianapolis Indy: <span id="Indianapolis_Indy">79</span> <button onclick="gainStrength('Indianapolis_Indy')">+ Strength</button><button onclick="loseStrength('Indianapolis_Indy')">- Strength</button></p></div>
-
-                <div><p>San Francisco 86'ers: <span id="San_Francisco_86ers">86</span> <button onclick="gainStrength('San_Francisco_86ers')">+ Strength</button><button onclick="loseStrength('San_Francisco_86ers')">- Strength</button></p></div>
-
-                <div><p>Seattle Seals: <span id="Seattle_Seals">92</span> <button onclick="gainStrength('Seattle_Seals')">+ Strength</button><button onclick="loseStrength('Seattle_Seals')">- Strength</button></p></div>
-
-                <div><p>Denver Dorks: <span id="Denver_Dorks">90</span> <button onclick="gainStrength('Denver_Dorks')">+ Strength</button><button onclick="loseStrength('Denver_Dorks')">- Strength</button></p></div>
-
-                <div><p>Nashville Neer-do-wells: <span id="Nashville_Neer_do_wells">30</span> <button onclick="gainStrength('Nashville_Neer_do_wells')">+ Strength</button><button onclick="loseStrength('Nashville_Neer_do_wells')">- Strength</button></p></div>
-
-                <div><p>Oklahoma City Naders: <span id="Oklahoma_City_Naders">7</span> <button onclick="gainStrength('Oklahoma_City_Naders')">+ Strength</button><button onclick="loseStrength('Oklahoma_City_Naders')">- Strength</button></p></div>
-
-                <div><p>Washington Washers: <span id="Washington_Washers">24</span> <button onclick="gainStrength('Washington_Washers')">+ Strength</button><button onclick="loseStrength('Washington_Washers')">- Strength</button></p></div>
-
-                <div><p>Las Vegas Gamblers: <span id="Las_Vegas_Gamblers">38</span> <button onclick="gainStrength('Las_Vegas_Gamblers')">+ Strength</button><button onclick="loseStrength('Las_Vegas_Gamblers')">- Strength</button></p></div>
-
-                <div><p>Boston Hearts: <span id="Boston_Hearts">27</span> <button onclick="gainStrength('Boston_Hearts')">+ Strength</button><button onclick="loseStrength('Boston_Hearts')">- Strength</button></p></div>
-
-                <div><p>Detroit Dryers: <span id="Detroit_Dryers">39</span> <button onclick="gainStrength('Detroit_Dryers')">+ Strength</button><button onclick="loseStrength('Detroit_Dryers')">- Strength</button></p></div>
-
-                <div><p>Louisville Cardinals: <span id="Louisville_Cardinals">11</span> <button onclick="gainStrength('Louisville_Cardinals')">+ Strength</button><button onclick="loseStrength('Louisville_Cardinals')">- Strength</button></p></div>
-
-                <div><p>Portland Roses: <span id="Portland_Roses">25</span> <button onclick="gainStrength('Portland_Roses')">+ Strength</button><button onclick="loseStrength('Portland_Roses')">- Strength</button></p></div>
-
-                <div><p>Baltimore Poets: <span id="Baltimore_Poets">21</span> <button onclick="gainStrength('Baltimore_Poets')">+ Strength</button><button onclick="loseStrength('Baltimore_Poets')">- Strength</button></p></div>
-
-                <div><p>Kansas City Winners: <span id="Kansas_City_Winners">28</span> <button onclick="gainStrength('Kansas_City_Winners')">+ Strength</button><button onclick="loseStrength('Kansas_City_Winners')">- Strength</button></p></div>
+            <div class="group-a-team-container" id="group-A-team-container">
+                <div class="team-card" id="Los_Angeles_Angels">
+                    <p>Los Angeles Angels: <span id="Los_Angeles_Angels">66</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Los_Angeles_Angels')">+ Strength</button>
+                        <button onclick="loseStrength('Los_Angeles_Angels')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Los_Angeles_Angels')">Promote</button>
+                        <button class="delgation" onclick="demotion('Los_Angeles_Angels')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Chicago_Grizzlies">
+                    <p>Chicago Grizzlies: <span id="Chicago_Grizzlies">30</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Chicago_Grizzlies')">+ Strength</button>
+                        <button onclick="loseStrength('Chicago_Grizzlies')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Chicago_Grizzlies')">Promote</button>
+                        <button class="delgation" onclick="demotion('Chicago_Grizzlies')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Houston_Hungovers">
+                    <p>Houston Hungovers: <span id="Houston_Hungovers">97</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Houston_Hungovers')">+ Strength</button>
+                        <button onclick="loseStrength('Houston_Hungovers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Houston_Hungovers')">Promote</button>
+                        <button class="delgation" onclick="demotion('Houston_Hungovers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Phoenix_Phantoms">
+                    <p>Phoenix Phantoms: <span id="Phoenix_Phantoms">97</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Phoenix_Phantoms')">+ Strength</button>
+                        <button onclick="loseStrength('Phoenix_Phantoms')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Phoenix_Phantoms')">Promote</button>
+                        <button class="delgation" onclick="demotion('Phoenix_Phantoms')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Philadelphia_Photos">
+                    <p>Philadelphia Photos: <span id="Philadelphia_Photos">76</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Philadelphia_Photos')">+ Strength</button>
+                        <button onclick="loseStrength('Philadelphia_Photos')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Philadelphia_Photos')">Promote</button>
+                        <button class="delgation" onclick="demotion('Philadelphia_Photos')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="San_Antonio_Sprouts">
+                    <p>San Antonio Sprouts: <span id="San_Antonio_Sprouts">52</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('San_Antonio_Sprouts')">+ Strength</button>
+                        <button onclick="loseStrength('San_Antonio_Sprouts')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('San_Antonio_Sprouts')">Promote</button>
+                        <button class="delgation" onclick="demotion('San_Antonio_Sprouts')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="San_Diego_Zoogoers">
+                    <p>San Diego Zoogoers: <span id="San_Diego_Zoogoers">30</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('San_Diego_Zoogoers')">+ Strength</button>
+                        <button onclick="loseStrength('San_Diego_Zoogoers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('San_Diego_Zoogoers')">Promote</button>
+                        <button class="delgation" onclick="demotion('San_Diego_Zoogoers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Dallas_Darts">
+                    <p>Dallas Darts: <span id="Dallas_Darts">30</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Dallas_Darts')">+ Strength</button>
+                        <button onclick="loseStrength('Dallas_Darts')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Dallas_Darts')">Promote</button>
+                        <button class="delgation" onclick="demotion('Dallas_Darts')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Jacksonville_Jags">
+                    <p>Jacksonville Jags: <span id="Jacksonville_Jags">79</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Jacksonville_Jags')">+ Strength</button>
+                        <button onclick="loseStrength('Jacksonville_Jags')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Jacksonville_Jags')">Promote</button>
+                        <button class="delgation" onclick="demotion('Jacksonville_Jags')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="San_Jose_Soccer_Team">
+                    <p>San Jose Soccer Team: <span id="San_Jose_Soccer_Team">72</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('San_Jose_Soccer_Team')">+ Strength</button>
+                        <button onclick="loseStrength('San_Jose_Soccer_Team')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('San_Jose_Soccer_Team')">Promote</button>
+                        <button class="delgation" onclick="demotion('San_Jose_Soccer_Team')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Charlotte_Cows">
+                    <p>Charlotte Cows: <span id="Charlotte_Cows">92</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Charlotte_Cows')">+ Strength</button>
+                        <button onclick="loseStrength('Charlotte_Cows')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Charlotte_Cows')">Promote</button>
+                        <button class="delgation" onclick="demotion('Charlotte_Cows')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Columbus_Cant">
+                    <p>Columbus Cant: <span id="Columbus_Cant">90</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Columbus_Cant')">+ Strength</button>
+                        <button onclick="loseStrength('Columbus_Cant')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Columbus_Cant')">Promote</button>
+                        <button class="delgation" onclick="demotion('Columbus_Cant')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Indianapolis_Indy">
+                    <p>Indianapolis Indy: <span id="Indianapolis_Indy">79</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Indianapolis_Indy')">+ Strength</button>
+                        <button onclick="loseStrength('Indianapolis_Indy')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Indianapolis_Indy')">Promote</button>
+                        <button class="delgation" onclick="demotion('Indianapolis_Indy')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="San_Francisco_86ers">
+                    <p>San Francisco 86'ers: <span id="San_Francisco_86ers">86</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('San_Francisco_86ers')">+ Strength</button>
+                        <button onclick="loseStrength('San_Francisco_86ers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('San_Francisco_86ers')">Promote</button>
+                        <button class="delgation" onclick="demotion('San_Francisco_86ers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Seattle_Seals">
+                    <p>Seattle Seals: <span id="Seattle_Seals">92</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Seattle_Seals')">+ Strength</button>
+                        <button onclick="loseStrength('Seattle_Seals')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Seattle_Seals')">Promote</button>
+                        <button class="delgation" onclick="demotion('Seattle_Seals')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Denver_Dorks">
+                    <p>Denver Dorks: <span id="Denver_Dorks">90</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Denver_Dorks')">+ Strength</button>
+                        <button onclick="loseStrength('Denver_Dorks')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Denver_Dorks')">Promote</button>
+                        <button class="delgation" onclick="demotion('Denver_Dorks')">demote</button>
+                    </div>
+                </div>
+            </div>
+            <div class="group-b-team-container" id="group-B-team-container">
+                <div class="team-card" id="Nashville_Neer_do_wells">
+                    <p>Nashville Neer-do-wells: <span id="Nashville_Neer_do_wells">30</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Nashville_Neer_do_wells')">+ Strength</button>
+                        <button onclick="loseStrength('Nashville_Neer_do_wells')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Nashville_Neer_do_wells')">Promote</button>
+                        <button class="delgation" onclick="demotion('Nashville_Neer_do_wells')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Oklahoma_City_Naders">
+                    <p>Oklahoma City Naders: <span id="Oklahoma_City_Naders">7</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Oklahoma_City_Naders')">+ Strength</button>
+                        <button onclick="loseStrength('Oklahoma_City_Naders')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Oklahoma_City_Naders')">Promote</button>
+                        <button class="delgation" onclick="demotion('Oklahoma_City_Naders')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Washington_Washers">
+                    <p>Washington Washers: <span id="Washington_Washers">24</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Washington_Washers')">+ Strength</button>
+                        <button onclick="loseStrength('Washington_Washers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Washington_Washers')">Promote</button>
+                        <button class="delgation" onclick="demotion('Washington_Washers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Las_Vegas_Gamblers">
+                    <p>Las Vegas Gamblers: <span id="Las_Vegas_Gamblers">38</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Las_Vegas_Gamblers')">+ Strength</button>
+                        <button onclick="loseStrength('Las_Vegas_Gamblers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Las_Vegas_Gamblers')">Promote</button>
+                        <button class="delgation" onclick="demotion('Las_Vegas_Gamblers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Boston_Hearts">
+                    <p>Boston Hearts: <span id="Boston_Hearts">27</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Boston_Hearts')">+ Strength</button>
+                        <button onclick="loseStrength('Boston_Hearts')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Boston_Hearts')">Promote</button>
+                        <button class="delgation" onclick="demotion('Boston_Hearts')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Detroit_Dryers">
+                    <p>Detroit Dryers: <span id="Detroit_Dryers">39</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Detroit_Dryers')">+ Strength</button>
+                        <button onclick="loseStrength('Detroit_Dryers')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Detroit_Dryers')">Promote</button>
+                        <button class="delgation" onclick="demotion('Detroit_Dryers')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Louisville_Cardinals">
+                    <p>Louisville Cardinals: <span id="Louisville_Cardinals">11</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Louisville_Cardinals')">+ Strength</button>
+                        <button onclick="loseStrength('Louisville_Cardinals')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Louisville_Cardinals')">Promote</button>
+                        <button class="delgation" onclick="demotion('Louisville_Cardinals')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Portland_Roses">
+                    <p>Portland Roses: <span id="Portland_Roses">25</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Portland_Roses')">+ Strength</button>
+                        <button onclick="loseStrength('Portland_Roses')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Portland_Roses')">Promote</button>
+                        <button class="delgation" onclick="demotion('Portland_Roses')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Baltimore_Poets">
+                    <p>Baltimore Poets: <span id="Baltimore_Poets">21</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Baltimore_Poets')">+ Strength</button>
+                        <button onclick="loseStrength('Baltimore_Poets')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Baltimore_Poets')">Promote</button>
+                        <button class="delgation" onclick="demotion('Baltimore_Poets')">demote</button>
+                    </div>
+                </div>
+                <div class="team-card" id="Kansas_City_Winners">
+                    <p>Kansas City Winners: <span id="Kansas_City_Winners">28</span></p>
+                    <div class="strength">
+                        <button onclick="gainStrength('Kansas_City_Winners')">+ Strength</button>
+                        <button onclick="loseStrength('Kansas_City_Winners')">- Strength</button>
+                    </div>
+                    <div class="delgation-buttons">
+                        <button class="delgation" onclick="promotion('Kansas_City_Winners')">Promote</button>
+                        <button class="delgation" onclick="demotion('Kansas_City_Winners')">demote</button>
+                    </div>
+                </div>
             </div>
         </aside>
 
@@ -257,34 +531,61 @@
 </body>
 <script>
     let teams = {
-        'Los_Angeles_Angels': { name: 'Los Angeles Angels', strength: 66 },
-        'Chicago_Grizzlies': { name: 'Chicago Grizzlies', strength: 30 },
-        'Houston_Hungovers': { name: 'Houston Hungovers', strength: 97 },
-        'Phoenix_Phantoms': { name: 'Phoenix Phantoms', strength: 97 },
-        'Philadelphia_Photos': { name: 'Philadelphia Photos', strength: 76 },
-        'San_Antonio_Sprouts': { name: 'San Antonio Sprouts', strength: 52 },
-        'San_Diego_Zoogoers': { name: 'San Diego Zoogoers', strength: 30 },
-        'Dallas_Darts': { name: 'Dallas Darts', strength: 30 },
-        'Jacksonville_Jags': { name: 'Jacksonville Jags', strength: 79 },
-        'San_Jose_Soccer_Team': { name: 'San Jose Soccer Team', strength: 72 },
-        'Charlotte_Cows': { name: 'Charlotte Cows', strength: 92 },
-        'Columbus_Cant': { name: 'Columbus Cant', strength: 90 },
-        'Indianapolis_Indy': { name: 'Indianapolis Indy', strength: 79 },
-        'San_Francisco_86ers': { name: 'San Francisco 86ers', strength: 86 },
-        'Seattle_Seals': { name: 'Seattle Seals', strength: 92 },
-        'Denver_Dorks': { name: 'Denver Dorks', strength: 90 },
-        'Nashville_Neer_do_wells': { name: 'Nashville Neer-do-wells', strength: 30 },
-        'Oklahoma_City_Naders': { name: 'Oklahoma City Naders', strength: 7 },
-        'Washington_Washers': { name: 'Washington Washers', strength: 24 },
-        'Las_Vegas_Gamblers': { name: 'Las Vegas Gamblers', strength: 38 },
-        'Boston_Hearts': { name: 'Boston Hearts', strength: 27 },
-        'Detroit_Dryers': { name: 'Detroit Dryers', strength: 39 },
-        'Louisville_Cardinals': { name: 'Louisville Cardinals', strength: 11 },
-        'Portland_Roses': { name: 'Portland Roses', strength: 25 },
-        'Baltimore_Poets': { name: 'Baltimore Poets', strength: 21 },
-        'Kansas_City_Winners': { name: 'Kansas City Winners', strength: 28 }
+        // Group A
+        'Los_Angeles_Angels': { name: 'Los Angeles Angels', strength: 66, group: 'A' },
+        'Chicago_Grizzlies': { name: 'Chicago Grizzlies', strength: 30, group: 'A' },
+        'Houston_Hungovers': { name: 'Houston Hungovers', strength: 97, group: 'A' },
+        'Phoenix_Phantoms': { name: 'Phoenix Phantoms', strength: 97, group: 'A' },
+        'Philadelphia_Photos': { name: 'Philadelphia Photos', strength: 76, group: 'A' },
+        'San_Antonio_Sprouts': { name: 'San Antonio Sprouts', strength: 52, group: 'A' },
+        'San_Diego_Zoogoers': { name: 'San Diego Zoogoers', strength: 30, group: 'A' },
+        'Dallas_Darts': { name: 'Dallas Darts', strength: 30, group: 'A' },
+        'Jacksonville_Jags': { name: 'Jacksonville Jags', strength: 79, group: 'A' },
+        'San_Jose_Soccer_Team': { name: 'San Jose Soccer Team', strength: 72, group: 'A' },
+        'Charlotte_Cows': { name: 'Charlotte Cows', strength: 92, group: 'A' },
+        'Columbus_Cant': { name: 'Columbus Cant', strength: 90, group: 'A' },
+        'Indianapolis_Indy': { name: 'Indianapolis Indy', strength: 79, group: 'A' },
+        'San_Francisco_86ers': { name: 'San Francisco 86ers', strength: 86, group: 'A' },
+        'Seattle_Seals': { name: 'Seattle Seals', strength: 92, group: 'A' },
+        'Denver_Dorks': { name: 'Denver Dorks', strength: 90, group: 'A' },
+        // Group B
+        'Nashville_Neer_do_wells': { name: 'Nashville Neer-do-wells', strength: 30, group: 'B' },
+        'Oklahoma_City_Naders': { name: 'Oklahoma City Naders', strength: 7, group: 'B' },
+        'Washington_Washers': { name: 'Washington Washers', strength: 24, group: 'B' },
+        'Las_Vegas_Gamblers': { name: 'Las Vegas Gamblers', strength: 38, group: 'B' },
+        'Boston_Hearts': { name: 'Boston Hearts', strength: 27, group: 'B' },
+        'Detroit_Dryers': { name: 'Detroit Dryers', strength: 39, group: 'B' },
+        'Louisville_Cardinals': { name: 'Louisville Cardinals', strength: 11, group: 'B' },
+        'Portland_Roses': { name: 'Portland Roses', strength: 25, group: 'B' },
+        'Baltimore_Poets': { name: 'Baltimore Poets', strength: 21, group: 'B' },
+        'Kansas_City_Winners': { name: 'Kansas City Winners', strength: 28, group: 'B' }
     };
     loadProgress()
+
+    function promotion(team){
+        console.log(teams[team].group)
+        if(teams[team].group === 'A'){
+            return
+        }
+        teams[team].group = 'A'
+        console.log(teams[team].group)
+        const currentDiv = document.getElementById(team)
+        const newParent = document.getElementById('group-A-team-container')
+        newParent.append(currentDiv)
+        saveProgress()
+    }
+    function demotion(team){
+        console.log(teams[team].group)
+        if(teams[team].group === 'B'){
+            return
+        }
+        teams[team].group = 'B'
+        console.log(teams[team].group)
+        const currentDiv = document.getElementById(team)
+        const newParent = document.getElementById('group-B-team-container')
+        newParent.append(currentDiv)
+        saveProgress()
+    }
 
     function saveProgress(){
         localStorage.setItem("teams",JSON.stringify(teams));
@@ -294,7 +595,16 @@
             teams = JSON.parse(localStorage.getItem("teams"));
             console.log(teams)
             for(const team in teams){
-                document.getElementById(team).textContent = teams[team].strength
+                document.getElementById(team).querySelector('span').textContent = teams[team].strength
+                if(teams[team].group === 'A'){
+                    currentDiv = document.getElementById(team)
+                    const newParent = document.getElementById('group-A-team-container')
+                    newParent.append(currentDiv)
+                } else if(teams[team].group === 'B'){
+                    currentDiv = document.getElementById(team)
+                    const newParent = document.getElementById('group-B-team-container')
+                    newParent.append(currentDiv)
+                }
             }
         }
     }
@@ -334,7 +644,7 @@
     function gainStrength(teamCode) {
         if(teams[teamCode].strength < 100){
             teams[teamCode].strength += 1;
-            document.getElementById(teamCode).textContent = teams[teamCode].strength;
+            document.getElementById(teamCode).querySelector('span').textContent = teams[teamCode].strength;
             saveProgress()
         }
     }
@@ -342,7 +652,7 @@
     function loseStrength(teamCode) {
         if(teams[teamCode].strength > 0){
             teams[teamCode].strength -= 1;
-            document.getElementById(teamCode).textContent = teams[teamCode].strength;
+            document.getElementById(teamCode).querySelector('span').textContent = teams[teamCode].strength;
             saveProgress()
         }
     }
