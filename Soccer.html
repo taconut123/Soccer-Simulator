@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href = 'https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <title>Soccer</title>
+    <style>
+        html, body {
+            background-color: #000505;
+            margin: 7px;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            display: flex;
+            background-color: #5D5D81;
+            width: 100%;
+            height: 97vh;
+        }
+        .sidebar {
+            background-color: #BFCDE0;
+            margin-top: 1%;
+            margin-left: 1%;
+            margin-bottom: 10px;
+            width: 300px;
+            height: calc(95%-10px);
+            border: solid black 5px;
+            text-align: center;
+        }
+        .main {
+            background-color: #FEFCFD;
+            margin-top: 1%;
+            margin-bottom: 10px;
+            height: calc(95%-10px);
+            min-width: fit-content;
+            flex: 1;
+            overflow-y: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+            display: block;
+            min-width: 0;
+            border: solid black 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        button {
+            font-size: x-small;
+            width: fit-content;
+        }
+        .team-container {
+            display: grid;
+            grid-template-columns: repeat(4,75px);
+            border-top: 1px solid black;
+            border-left: 1px solid black;
+        }
+        .team-container div {
+            height: fit-content;
+            border-right: 1px solid black;
+            border-bottom: 1px solid black;
+            height: 127px;
+            font-size: 14px;
+        }
+        #strength-title {
+            margin-bottom: 1px;
+            margin-top: -2px;
+        }
+        #simulate-match {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20%;
+        }
+        #simulate-match button{
+            height: auto;
+            width: 300px;
+            font-size: xx-large;
+        }
+        #team-1-container {
+            display:flex; 
+            justify-content: flex-start;
+            align-items: center;
+        }
+        #team-2-container {
+            display:flex; 
+            justify-content: flex-end;
+            align-items: center;
+        }
+        #VS {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #match-display {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        #match-display span {
+            font-size: 55px;
+        }
+        #team-selection {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            gap: 20px;
+        }
+        #team_1_selection {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+        }
+        #team_1_selection button {
+            height: 75px;
+            width: 75px;
+        }
+        #team_2_selection {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+        }
+        #team_2_selection button {
+            height: 75px;
+            width: 75px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h1 id="strength-title">Strengths</h1>
+            <div class="team-container">
+                <div><p>Los Angeles Angels: <span id="Los_Angeles_Angels">50</span> <button onclick="gainStrength('Los_Angeles_Angels')">+ Strength</button><button onclick="loseStrength('Los_Angeles_Angels')">- Strength</button></p></div>
+
+                <div><p>Chicago Grizzlies: <span id="Chicago_Grizzlies">50</span> <button onclick="gainStrength('Chicago_Grizzlies')">+ Strength</button><button onclick="loseStrength('Chicago_Grizzlies')">- Strength</button></p></div>
+
+                <div><p>Houston Hungovers: <span id="Houston_Hungovers">50</span> <button onclick="gainStrength('Houston_Hungovers')">+ Strength</button><button onclick="loseStrength('Houston_Hungovers')">- Strength</button></p></div>
+
+                <div><p>Phoenix Phantoms: <span id="Phoenix_Phantoms">50</span> <button onclick="gainStrength('Phoenix_Phantoms')">+ Strength</button><button onclick="loseStrength('Phoenix_Phantoms')">- Strength</button></p></div>
+
+                <div><p>Philadelphia Photos: <span id="Philadelphia_Photos">50</span> <button onclick="gainStrength('Philadelphia_Photos')">+ Strength</button><button onclick="loseStrength('Philadelphia_Photos')">- Strength</button></p></div>
+
+                <div><p>San Antonio Sprouts: <span id="San_Antonio_Sprouts">50</span> <button onclick="gainStrength('San_Antonio_Sprouts')">+ Strength</button><button onclick="loseStrength('San_Antonio_Sprouts')">- Strength</button></p></div>
+
+                <div><p>San Diego Zoogoers: <span id="San_Diego_Zoogoers">50</span> <button onclick="gainStrength('San_Diego_Zoogoers')">+ Strength</button><button onclick="loseStrength('San_Diego_Zoogoers')">- Strength</button></p></div>
+
+                <div><p>Dallas Darts: <span id="Dallas_Darts">50</span> <button onclick="gainStrength('Dallas_Darts')">+ Strength</button><button onclick="loseStrength('Dallas_Darts')">- Strength</button></p></div>
+
+                <div><p>Jacksonville Jags: <span id="Jacksonville_Jags">50</span> <button onclick="gainStrength('Jacksonville_Jags')">+ Strength</button><button onclick="loseStrength('Jacksonville_Jags')">- Strength</button></p></div>
+
+                <div><p>San Jose Soccer Team: <span id="San_Jose_Soccer_Team">50</span> <button onclick="gainStrength('San_Jose_Soccer_Team')">+ Strength</button><button onclick="loseStrength('San_Jose_Soccer_Team')">- Strength</button></p></div>
+
+                <div><p>Charlotte Cows: <span id="Charlotte_Cows">50</span> <button onclick="gainStrength('Charlotte_Cows')">+ Strength</button><button onclick="loseStrength('Charlotte_Cows')">- Strength</button></p></div>
+
+                <div><p>Columbus Cant: <span id="Columbus_Cant">50</span> <button onclick="gainStrength('Columbus_Cant')">+ Strength</button><button onclick="loseStrength('Columbus_Cant')">- Strength</button></p></div>
+
+                <div><p>Indianapolis Indy: <span id="Indianapolis_Indy">50</span> <button onclick="gainStrength('Indianapolis_Indy')">+ Strength</button><button onclick="loseStrength('Indianapolis_Indy')">- Strength</button></p></div>
+
+                <div><p>San Francisco 86'ers: <span id="San_Francisco_86ers">50</span> <button onclick="gainStrength('San_Francisco_86ers')">+ Strength</button><button onclick="loseStrength('San_Francisco_86ers')">- Strength</button></p></div>
+
+                <div><p>Seattle Seals: <span id="Seattle_Seals">50</span> <button onclick="gainStrength('Seattle_Seals')">+ Strength</button><button onclick="loseStrength('Seattle_Seals')">- Strength</button></p></div>
+
+                <div><p>Denver Dorks: <span id="Denver_Dorks">50</span> <button onclick="gainStrength('Denver_Dorks')">+ Strength</button><button onclick="loseStrength('Denver_Dorks')">- Strength</button></p></div>
+
+                <div><p>Nashville Neer-do-wells: <span id="Nashville_Neer_do_wells">50</span> <button onclick="gainStrength('Nashville_Neer_do_wells')">+ Strength</button><button onclick="loseStrength('Nashville_Neer_do_wells')">- Strength</button></p></div>
+
+                <div><p>Oklahoma City Naders: <span id="Oklahoma_City_Naders">50</span> <button onclick="gainStrength('Oklahoma_City_Naders')">+ Strength</button><button onclick="loseStrength('Oklahoma_City_Naders')">- Strength</button></p></div>
+
+                <div><p>Washington Washers: <span id="Washington_Washers">50</span> <button onclick="gainStrength('Washington_Washers')">+ Strength</button><button onclick="loseStrength('Washington_Washers')">- Strength</button></p></div>
+
+                <div><p>Las Vegas Gamblers: <span id="Las_Vegas_Gamblers">50</span> <button onclick="gainStrength('Las_Vegas_Gamblers')">+ Strength</button><button onclick="loseStrength('Las_Vegas_Gamblers')">- Strength</button></p></div>
+
+                <div><p>Boston Hearts: <span id="Boston_Hearts">50</span> <button onclick="gainStrength('Boston_Hearts')">+ Strength</button><button onclick="loseStrength('Boston_Hearts')">- Strength</button></p></div>
+
+                <div><p>Detroit Dryers: <span id="Detroit_Dryers">50</span> <button onclick="gainStrength('Detroit_Dryers')">+ Strength</button><button onclick="loseStrength('Detroit_Dryers')">- Strength</button></p></div>
+
+                <div><p>Louisville Cardinals: <span id="Louisville_Cardinals">50</span> <button onclick="gainStrength('Louisville_Cardinals')">+ Strength</button><button onclick="loseStrength('Louisville_Cardinals')">- Strength</button></p></div>
+
+                <div><p>Portland Roses: <span id="Portland_Roses">50</span> <button onclick="gainStrength('Portland_Roses')">+ Strength</button><button onclick="loseStrength('Portland_Roses')">- Strength</button></p></div>
+
+                <div><p>Baltimore Poets: <span id="Baltimore_Poets">50</span> <button onclick="gainStrength('Baltimore_Poets')">+ Strength</button><button onclick="loseStrength('Baltimore_Poets')">- Strength</button></p></div>
+
+                <div><p>Kansas City Winners: <span id="Kansas_City_Winners">50</span> <button onclick="gainStrength('Kansas_City_Winners')">+ Strength</button><button onclick="loseStrength('Kansas_City_Winners')">- Strength</button></p></div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div id="match-display">
+                <div id="team-1-container"><span id="team_1"></span><span>'s Score:</span><p> </p><span id="team_1_score">50</span></div>
+                <div id="VS"><p>VS</p></div>
+                <div id="team-2-container"><span id="team_2"></span><span>'s Score:</span><span id="team_2_score">50</span></div>
+            </div>
+            <div id="team-selection">
+                <div id="team_1_selection">
+                    <button onclick="selectTeam1('LAA')">Los Angeles Angels</button>
+                    <button onclick="selectTeam1('CHI')">Chicago Grizzlies</button>
+                    <button onclick="selectTeam1('HOU')">Houston Hungovers</button>
+                    <button onclick="selectTeam1('PHX')">Phoenix Phantoms</button>
+                    <button onclick="selectTeam1('PHI')">Philadelphia Photos</button>
+                    <button onclick="selectTeam1('SAS')">San Antonio Sprouts</button>
+                    <button onclick="selectTeam1('SDZ')">San Diego Zoogoers</button>
+                    <button onclick="selectTeam1('DAL')">Dallas Darts</button>
+                    <button onclick="selectTeam1('JAX')">Jacksonville Jags</button>
+                    <button onclick="selectTeam1('SJS')">San Jose Soccer Team</button>
+                    <button onclick="selectTeam1('CHA')">Charlotte Cows</button>
+                    <button onclick="selectTeam1('COL')">Columbus Cant</button>
+                    <button onclick="selectTeam1('IND')">Indianapolis Indy</button>
+                    <button onclick="selectTeam1('SFE')">San Francisco 86'ers</button>
+                    <button onclick="selectTeam1('SEA')">Seattle Seals</button>
+                    <button onclick="selectTeam1('DEN')">Denver Dorks</button>
+                    <button onclick="selectTeam1('NSH')">Nashville Neer-do-wells</button>
+                    <button onclick="selectTeam1('OKC')">Oklahoma City Naders</button>
+                    <button onclick="selectTeam1('WAS')">Washington Washers</button>
+                    <button onclick="selectTeam1('LVG')">Las Vegas Gamblers</button>
+                    <button onclick="selectTeam1('BOS')">Boston Hearts</button>
+                    <button onclick="selectTeam1('DET')">Detroit Dryers</button>
+                    <button onclick="selectTeam1('LOU')">Louisville Cardinals</button>
+                    <button onclick="selectTeam1('POR')">Portland Roses</button>
+                    <button onclick="selectTeam1('BAL')">Baltimore Poets</button>
+                    <button onclick="selectTeam1('KCW')">Kansas City Winners</button>
+                </div>
+                <div id="team_2_selection">
+                    <button onclick="selectTeam2('LAA')">Los Angeles Angels</button>
+                    <button onclick="selectTeam2('CHI')">Chicago Grizzlies</button>
+                    <button onclick="selectTeam2('HOU')">Houston Hungovers</button>
+                    <button onclick="selectTeam2('PHX')">Phoenix Phantoms</button>
+                    <button onclick="selectTeam2('PHI')">Philadelphia Photos</button>
+                    <button onclick="selectTeam2('SAS')">San Antonio Sprouts</button>
+                    <button onclick="selectTeam2('SDZ')">San Diego Zoogoers</button>
+                    <button onclick="selectTeam2('DAL')">Dallas Darts</button>
+                    <button onclick="selectTeam2('JAX')">Jacksonville Jags</button>
+                    <button onclick="selectTeam2('SJS')">San Jose Soccer Team</button>
+                    <button onclick="selectTeam2('CHA')">Charlotte Cows</button>
+                    <button onclick="selectTeam2('COL')">Columbus Cant</button>
+                    <button onclick="selectTeam2('IND')">Indianapolis Indy</button>
+                    <button onclick="selectTeam2('SFE')">San Francisco 86'ers</button>
+                    <button onclick="selectTeam2('SEA')">Seattle Seals</button>
+                    <button onclick="selectTeam2('DEN')">Denver Dorks</button>
+                    <button onclick="selectTeam2('NSH')">Nashville Neer-do-wells</button>
+                    <button onclick="selectTeam2('OKC')">Oklahoma City Naders</button>
+                    <button onclick="selectTeam2('WAS')">Washington Washers</button>
+                    <button onclick="selectTeam2('LVG')">Las Vegas Gamblers</button>
+                    <button onclick="selectTeam2('BOS')">Boston Hearts</button>
+                    <button onclick="selectTeam2('DET')">Detroit Dryers</button>
+                    <button onclick="selectTeam2('LOU')">Louisville Cardinals</button>
+                    <button onclick="selectTeam2('POR')">Portland Roses</button>
+                    <button onclick="selectTeam2('BAL')">Baltimore Poets</button>
+                    <button onclick="selectTeam2('KCW')">Kansas City Winners</button>
+                </div>
+            </div>
+            <div id="simulate-match"><button onclick="simulateMatch()">Simulate Match</button>
+        </main>
+    </div>
+</body>
+<script>
+    let teams = {
+        'Los_Angeles_Angels': { name: 'Los Angeles Angels', strength: 50 },
+        'Chicago_Grizzlies': { name: 'Chicago Grizzlies', strength: 50 },
+        'Houston_Hungovers': { name: 'Houston Hungovers', strength: 50 },
+        'Phoenix_Phantoms': { name: 'Phoenix Phantoms', strength: 50 },
+        'Philadelphia_Photos': { name: 'Philadelphia Photos', strength: 50 },
+        'San_Antonio_Sprouts': { name: 'San Antonio Sprouts', strength: 50 },
+        'San_Diego_Zoogoers': { name: 'San Diego Zoogoers', strength: 50 },
+        'Dallas_Darts': { name: 'Dallas Darts', strength: 50 },
+        'Jacksonville_Jags': { name: 'Jacksonville Jags', strength: 50 },
+        'San_Jose_Soccer_Team': { name: 'San Jose Soccer Team', strength: 50 },
+        'Charlotte_Cows': { name: 'Charlotte Cows', strength: 50 },
+        'Columbus_Cant': { name: 'Columbus Cant', strength: 50 },
+        'Indianapolis_Indy': { name: 'Indianapolis Indy', strength: 50 },
+        'San_Francisco_86ers': { name: 'San Francisco 86ers', strength: 50 },
+        'Seattle_Seals': { name: 'Seattle Seals', strength: 50 },
+        'Denver_Dorks': { name: 'Denver Dorks', strength: 50 },
+        'Nashville_Neer_do_wells': { name: 'Nashville Neer-do-wells', strength: 50 },
+        'Oklahoma_City_Naders': { name: 'Oklahoma City Naders', strength: 50 },
+        'Washington_Washers': { name: 'Washington Washers', strength: 50 },
+        'Las_Vegas_Gamblers': { name: 'Las Vegas Gamblers', strength: 50 },
+        'Boston_Hearts': { name: 'Boston Hearts', strength: 50 },
+        'Detroit_Dryers': { name: 'Detroit Dryers', strength: 50 },
+        'Louisville_Cardinals': { name: 'Louisville Cardinals', strength: 50 },
+        'Portland_Roses': { name: 'Portland Roses', strength: 50 },
+        'Baltimore_Poets': { name: 'Baltimore Poets', strength: 50 },
+        'Kansas_City_Winners': { name: 'Kansas City Winners', strength: 50 }
+    };
+    loadProgress()
+
+    function saveProgress(){
+        localStorage.setItem("teams",JSON.stringify(teams));
+    }
+    function loadProgress(){
+        if(localStorage.getItem("teams") !== null){
+            teams = JSON.parse(localStorage.getItem("teams"));
+            console.log(teams)
+            for(const team in teams){
+                document.getElementById(team).textContent = teams[team].strength
+            }
+        }
+    }
+
+
+    const converison = {
+    'LAA': { name: 'Los_Angeles_Angels'},
+    'CHI': { name: 'Chicago_Grizzlies'},
+    'HOU': { name: 'Houston_Hungovers'},
+    'PHX': { name: 'Phoenix_Phantoms'},
+    'PHI': { name: 'Philadelphia_Photos'},
+    'SAS': { name: 'San_Antonio_Sprouts'},
+    'SDZ': { name: 'San_Diego_Zoogoers'},
+    'DAL': { name: 'Dallas_Darts'},
+    'JAX': { name: 'Jacksonville_Jags'},
+    'SJS': { name: 'San_Jose_Soccer_Team'},
+    'CHA': { name: 'Charlotte_Cows'},
+    'COL': { name: 'Columbus_Cant'},
+    'IND': { name: 'Indianapolis_Indy'},
+    'SFE': { name: 'San_Francisco_86ers'},
+    'SEA': { name: 'Seattle_Seals'},
+    'DEN': { name: 'Denver_Dorks'},
+    'NSH': { name: 'Nashville_Neer-do-wells'},
+    'OKC': { name: 'Oklahoma_City_Naders'},
+    'WAS': { name: 'Washington_Washers'},
+    'LVG': { name: 'Las_Vegas_Gamblers'},
+    'BOS': { name: 'Boston_Hearts'},
+    'DET': { name: 'Detroit_Dryers'},
+    'LOU': { name: 'Louisville_Cardinals'},
+    'POR': { name: 'Portland_Roses'},
+    'BAL': { name: 'Baltimore_Poets'},
+    'KCW': { name: 'Kansas_City_Winners'}
+};
+    let team_1 = null
+    let team_2 = null
+
+    function gainStrength(teamCode) {
+        if(teams[teamCode].strength < 100){
+            teams[teamCode].strength += 1;
+            document.getElementById(teamCode).textContent = teams[teamCode].strength;
+            saveProgress()
+        }
+    }
+
+    function loseStrength(teamCode) {
+        if(teams[teamCode].strength > 0){
+            teams[teamCode].strength -= 1;
+            document.getElementById(teamCode).textContent = teams[teamCode].strength;
+            saveProgress()
+        }
+    }
+
+    function updateStrengthDisplay(teamCode) {
+        // Find the team's full name to get the right span ID
+        const fullName = teams[teamCode].name.replace(/\s+/g, '_');
+        document.getElementById(fullName).textContent = teams[teamCode].strength;
+    }
+    function selectTeam1(team) {
+        team_1 = team
+        document.getElementById("team_1").innerText = team
+        document.getElementById("team_1_score").innerText = '0'
+    }
+    function selectTeam2(team) {
+        team_2 = team
+        document.getElementById("team_2").innerText = team
+        document.getElementById("team_2_score").innerText = '0'
+    }
+    function simulateMatch() {
+        if(!(team_1 in teams)){
+            team_1 = converison[team_1].name
+        }
+        let team_1_strength = teams[team_1].strength
+        if(!(team_2 in teams)){
+            team_2 = converison[team_2].name
+        }
+        let team_2_strength = teams[team_2].strength
+        const total_strength = team_1_strength + team_2_strength
+        const team_1_ratio = team_1_strength /total_strength
+
+        const totalGoals = Math.floor(Math.random() * 9)
+        const team_1_score = Math.floor(totalGoals*team_1_ratio) 
+        const team_2_score = totalGoals - team_1_score
+        document.getElementById("team_1_score").innerText = team_1_score
+        document.getElementById("team_2_score").innerText = team_2_score
+    }
+</script>
+</html>
