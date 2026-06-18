@@ -370,12 +370,14 @@
             team_2 = converison[team_2].name
         }
         let team_2_strength = teams[team_2].strength
-        const total_strength = team_1_strength + team_2_strength
-        const team_1_ratio = team_1_strength /total_strength
+        // const total_strength = team_1_strength + team_2_strength
+        // const team_1_ratio = team_1_strength /total_strength
 
-        const totalGoals = Math.floor(Math.random() * 9)
-        const team_1_score = Math.floor(totalGoals*team_1_ratio) 
-        const team_2_score = totalGoals - team_1_score
+        // const totalGoals = Math.floor(Math.random() * 9)
+        // const team_1_score = Math.floor(totalGoals*team_1_ratio) 
+        // const team_2_score = totalGoals - team_1_score
+        const team_1_score = Math.floor(team_1_strength * 0.01) + Math.floor(Math.random() * 5);
+        const team_2_score = Math.floor(team_2_strength * 0.01) + Math.floor(Math.random() * 5);
         document.getElementById("team_1_score").innerText = team_1_score
         document.getElementById("team_2_score").innerText = team_2_score
     }
