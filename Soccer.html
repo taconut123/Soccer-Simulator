@@ -11,13 +11,21 @@
             margin: 7px;
             font-family: 'Roboto', sans-serif;
         }
+        button {
+            font-size: x-small;
+            width: fit-content;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+        }
+        
+        
         .container {
             display: flex;
             background-color: #F15025;
             width: 100%;
             height: 97vh;
         }
-        .sidebar {
+        .strength-container {
             background-color: #e6e8e6;
             margin-top: 1%;
             margin-left: 1%;
@@ -27,29 +35,11 @@
             border: solid #191919 5px;
             text-align: center;
         }
-        .main {
-            background-color: #ced0ce;
-            margin-top: 1%;
-            margin-bottom: 10px;
-            height: calc(95%-10px);
-            min-width: fit-content;
-            flex: 1;
-            overflow-y: auto;
-            margin-left: 10px;
-            margin-right: 10px;
-            display: block;
-            min-width: 0;
-            border: solid #191919 5px;
-            display: flex;
-            flex-direction: column;
-        }
-        button {
-            font-size: x-small;
-            width: fit-content;
-            background-color: #FFFFFF;
-            border-radius: 10px;
-        }
         
+        #strength-title {
+            margin-bottom: 1px;
+            margin-top: -2px;
+        }
         .group-a-team-container{
             display: grid;
             grid-template-columns: auto auto auto auto;            
@@ -71,10 +61,6 @@
             font-size: 14px;
         }
 
-        #strength-title {
-            margin-bottom: 1px;
-            margin-top: -2px;
-        }
         .team-card {
             border: 1px solid #191919;
             width: 120px;
@@ -99,18 +85,32 @@
             display: flex;
         }
 
-        #simulate-match {
+        .main-content {
+            background-color: #ced0ce;
+            margin-top: 1%;
+            margin-bottom: 10px;
+            height: calc(95%-10px);
+            min-width: fit-content;
+            flex: 1;
+            overflow-y: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+            display: block;
+            min-width: 0;
+            border: solid #191919 5px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+        }
+        #match-display {
+            display: flex;
+            justify-content: space-around;
             align-items: center;
-            margin-top: 20%;
+            margin-top: 20px;
+            gap: 20px;
         }
-        #simulate-match button{
-            height: auto;
-            width: 300px;
-            font-size: xx-large;
+        #match-display span {
+            font-size: 55px;
         }
-
         #team-1-container {
             display:flex; 
             justify-content: flex-start;
@@ -126,17 +126,6 @@
             justify-content: center;
             align-items: center;
         }
-        #match-display {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 20px;
-            gap: 20px;
-        }
-        #match-display span {
-            font-size: 55px;
-        }
-
         #team-selection {
             display: flex;
             justify-content: space-around;
@@ -160,14 +149,27 @@
         #team_2_selection button {
             height: 75px;
             width: 80px;
-            font-size: small;
+            font-size: small
+        }
+        #simulate-match {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20%;
+        }
+        #simulate-match button{
+            height: auto;
+            width: 300px;
+            font-size: xx-large;
         }
 
+        
+        
     </style>
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
+        <aside class="strength-container">
             <h1 id="strength-title">Strengths</h1>
             <div class="group-a-team-container" id="group-A-team-container">
                 <div class="team-card" id="Los_Angeles_Angels">
@@ -461,7 +463,7 @@
             </div>
         </aside>
 
-        <main class="main">
+        <main class="main-content">
             <div id="match-display">
                 <div id="team-1-container"><span id="team_1"></span><span>'s Score:</span><p> </p><span id="team_1_score">0</span></div>
                 <div id="VS"><p>VS</p></div>
