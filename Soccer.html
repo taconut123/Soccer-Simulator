@@ -548,7 +548,6 @@
         'Baltimore_Poets': { name: 'Baltimore Poets', strength: 21, group: 'B' },
         'Kansas_City_Winners': { name: 'Kansas City Winners', strength: 28, group: 'B' }
     };
-    loadProgress()
 
     function promotion(team){
         console.log(teams[team].group)
@@ -622,7 +621,6 @@
     'BOS': { name: 'Boston_Hearts'},
     'DET': { name: 'Detroit_Dryers'},
     'LOU': { name: 'Louisville_Cardinals'},
-    'POR': { name: 'Portland_Roses'},
     'BAL': { name: 'Baltimore_Poets'},
     'KCW': { name: 'Kansas_City_Winners'}
 };
@@ -680,5 +678,7 @@
         document.getElementById("team_1_score").innerText = team_1_score
         document.getElementById("team_2_score").innerText = team_2_score
     }
+        loadProgress()
+
 </script>
 </html>
