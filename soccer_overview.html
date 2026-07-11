@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer Overview</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            background-color: #F15025;
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .schedule-container {
+            flex: 0 0 28%;
+            min-width: 280px;
+            background-color: #1a1a2e;
+            border-right: 5px solid #191919;
+            padding: 12px;
+            overflow-y: auto;
+            color: #f0f0f0;
+        }
+
+        .schedule-container > h1 {
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #F15025;
+        }
+
+        .schedule-group {
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .schedule-group-title {
+            background: #F15025;
+            color: #fff;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+        }
+
+        .schedule-group-title.minor {
+            background: #4a6fa5;
+        }
+
+        .schedule-section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aaa;
+            margin: 8px 0 10px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .schedule-section-label:first-of-type {
+            border-top: none;
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .schedule-row {
+            display: grid;
+            grid-template-columns: 52px 1fr 36px 1fr;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.72rem;
+        }
+
+        .schedule-row:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-row.completed {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .schedule-matchday {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .schedule-team-cell {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .schedule-team-cell.away {
+            flex-direction: row-reverse;
+        }
+
+        .schedule-team-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            line-height: 1.2;
+        }
+
+        .schedule-score-input {
+            width: 32px;
+            height: 24px;
+            padding: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            font-family: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.35);
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .schedule-score-input:focus {
+            outline: none;
+            border-color: #F15025;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .schedule-score-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .schedule-score-input::-webkit-outer-spin-button,
+        .schedule-score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .schedule-score-input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .schedule-vs {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+            background-color: green;
+        }
+
+        .standings-stats-container {
+            flex: 11;
+            min-height: 0;
+            background-color: red;
+            border: 5px solid black;
+            padding: 8px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .playoff-bracket-container {
+            flex: 14;
+            min-height: 0;
+            border: 5px solid black;
+            padding: 12px;
+            overflow-y: auto;
+            background-color: #ced0ce;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .playoff-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #191919;
+        }
+
+        .playoff-header h1 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .bracket-toggle {
+            display: flex;
+            gap: 6px;
+        }
+
+        .bracket-toggle button {
+            font-family: inherit;
+            font-size: 0.75rem;
+            padding: 6px 14px;
+            border: 2px solid #191919;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .bracket-toggle button.active {
+            background: #F15025;
+            color: #fff;
+        }
+
+        .bracket-toggle button.minor-active {
+            background: #4a6fa5;
+            color: #fff;
+        }
+
+        .bracket-content {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: auto;
+        }
+
+        .bracket-layout {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 20px;
+            min-width: min-content;
+            padding: 8px 4px;
+        }
+
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            gap: 12px;
+            min-width: 200px;
+        }
+
+        .bracket-round-title {
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #444;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .bracket-match {
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid #191919;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 72px;
+        }
+
+        .bracket-match.completed {
+            border-color: #2e7d32;
+            background: rgba(200, 230, 201, 0.9);
+        }
+
+        .bracket-match.bye-match {
+            border-style: dashed;
+            background: rgba(255, 243, 224, 0.9);
+            justify-content: center;
+        }
+
+        .bracket-match-label {
+            font-size: 0.6rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .bracket-team-line {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 26px;
+        }
+
+        .bracket-team-line.winner {
+            font-weight: bold;
+        }
+
+        .bracket-team-line.tbd {
+            color: #888;
+            font-style: italic;
+            font-size: 0.75rem;
+        }
+
+        .bracket-team-line.advanced {
+            color: #1b5e20;
+            font-weight: bold;
+        }
+
+        .bracket-match.partial {
+            border-style: dashed;
+        }
+
+        .bracket-team-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.75rem;
+        }
+
+        .bracket-seed {
+            font-size: 0.65rem;
+            color: #888;
+            width: 18px;
+            flex-shrink: 0;
+        }
+
+        .bracket-bye-tag {
+            font-size: 0.6rem;
+            color: #888;
+            font-style: italic;
+            flex-shrink: 0;
+        }
+
+        .bracket-score-input {
+            width: 32px;
+            height: 22px;
+            padding: 0;
+            text-align: center;
+            font-size: 0.75rem;
+            font-family: inherit;
+            border: 1px solid #999;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .bracket-score-input:focus {
+            outline: none;
+            border-color: #F15025;
+        }
+
+        .bracket-score-input::-webkit-outer-spin-button,
+        .bracket-score-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .bracket-score-input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .bracket-connector-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 0 4px;
+        }
+
+        .bracket-seed-note {
+            font-size: 0.7rem;
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .bracket-empty-msg {
+            color: #666;
+            font-size: 0.85rem;
+            font-style: italic;
+            padding: 16px;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .season-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 10px 16px;
+            background: #191919;
+            border-top: 4px solid #F15025;
+            color: #fff;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .season-menu button {
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 8px 16px;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .season-menu button:hover:not(:disabled) {
+            background: #F15025;
+            border-color: #F15025;
+        }
+
+        .season-menu button:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .season-menu button.champions-btn {
+            background: #c9a227;
+            border-color: #c9a227;
+            color: #191919;
+        }
+
+        .season-menu button.champions-btn:hover {
+            background: #e0b82e;
+            border-color: #e0b82e;
+        }
+
+        .season-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+        }
+
+        #season-label {
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 0.04em;
+        }
+
+        #season-mode-label {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            min-height: 14px;
+        }
+
+        .archive-banner {
+            display: none;
+            background: #4a6fa5;
+            color: #fff;
+            text-align: center;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .archive-banner.visible {
+            display: block;
+        }
+
+        .schedule-score-input:disabled,
+        .bracket-score-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .champions-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .champions-screen.hidden {
+            display: none;
+        }
+
+        .champions-panel {
+            background: linear-gradient(160deg, #1a1a2e 0%, #2d2d44 100%);
+            border: 3px solid #c9a227;
+            border-radius: 12px;
+            width: min(560px, 100%);
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #f0f0f0;
+            padding: 24px;
+        }
+
+        .champions-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #c9a227;
+        }
+
+        .champions-panel-header h1 {
+            font-size: 1.4rem;
+            color: #c9a227;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .champions-close-btn {
+            font-family: inherit;
+            background: transparent;
+            border: 1px solid #aaa;
+            color: #fff;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .champions-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .champions-year-block {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            border-left: 4px solid #F15025;
+        }
+
+        .champions-year-block.current {
+            border-left-color: #c9a227;
+        }
+
+        .champions-year-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #c9a227;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .champions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 0.8rem;
+        }
+
+        .champions-row .league-label {
+            color: #aaa;
+            width: 100px;
+            flex-shrink: 0;
+        }
+
+        .champions-row .champion-name {
+            font-weight: bold;
+            text-align: right;
+            flex: 1;
+        }
+
+        .champions-row .champion-name.empty {
+            color: #666;
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .champions-empty-msg {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 24px 0;
+        }
+
+        .major-groups,
+        .minor-groups {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .group-standings {
+            flex: 1 1 180px;
+            min-width: 160px;
+            border: 1px solid black;
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .minor-groups .group-standings {
+            flex: 1 1 220px;
+            min-width: 200px;
+        }
+
+        .group-standings-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid black;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .group-teams {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .team-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            min-height: 28px;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .team-row:last-child {
+            border-bottom: none;
+        }
+
+        .team-name {
+            flex: 1 1 0;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .team-name h2 {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+
+        .minor-groups .team-name h2 {
+            font-size: 0.72rem;
+        }
+
+        .team-stats {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 2px 0;
+            flex: 0 0 auto;
+        }
+
+        .team-stats > div {
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .team-stats > div h2 {
+            font-size: 0.85rem;
+        }
+
+        .team-stats-header > div h2 {
+            font-size: 0.7rem;
+        }
+        .group-standings-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            min-height: 28px;
+            padding: 2px 0;
+        }
+        .team-explain {
+            width: 200px;
+            text-align: right;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        .team-explain h2 {
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <div id="archive-banner" class="archive-banner">Viewing archived season — scores are read-only</div>
+        <div class="container">
+        <div class="schedule-container"><h1>Schedule</h1></div>
+        <div class="main-content">
+            <div class="standings-stats-container">
+                <h1>Standings</h1>
+                <div class="major-groups">
+                    <div class="group-standings group-a-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group A</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-a-teams"></div>
+                    </div> 
+                    <div class="group-standings group-b-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group B</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-b-teams"></div>
+                    </div>
+                    <div class="group-standings group-c-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group C</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-c-teams"></div>
+                    </div>
+                    <div class="group-standings group-d-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group D</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-d-teams"></div>
+                    </div>
+                </div>
+                <div class="minor-groups">
+                    <div class="group-standings group-1-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group #1</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-1-teams"></div>
+                    </div>
+                    <div class="group-standings group-2-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group #2</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-2-teams"></div>
+                    </div>
+                    <div class="group-standings group-3-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group #3</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-3-teams"></div>
+                    </div>
+                    <div class="group-standings group-4-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group #4</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-4-teams"></div>
+                    </div>
+                    <div class="group-standings group-5-standings">
+                        <div class="group-standings-header">
+                            <div class="team-name"><h2>Group #5</h2></div>
+                            <div class="team-stats team-stats-header">
+                                <div><h2>PTS</h2></div>
+                                <div><h2>PF</h2></div>
+                                <div><h2>PA</h2></div>
+                                <div><h2>PD</h2></div>
+                            </div>
+                        </div>
+                        <div class="group-teams group-5-teams"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="playoff-bracket-container">
+                <div class="playoff-header">
+                    <h1>Playoff Bracket</h1>
+                    <div class="bracket-toggle">
+                        <button type="button" id="bracket-major-btn" class="active">Major League</button>
+                        <button type="button" id="bracket-minor-btn">Minor League</button>
+                    </div>
+                </div>
+                <div id="bracket-content" class="bracket-content"></div>
+            </div>
+        </div>
+        </div>
+        <footer class="season-menu">
+            <button type="button" id="last-year-btn">← Last Year</button>
+            <div class="season-indicator">
+                <span id="season-label">Season 1</span>
+                <span id="season-mode-label"></span>
+            </div>
+            <button type="button" id="next-year-btn">Next Year →</button>
+            <button type="button" id="champions-btn" class="champions-btn">Champions</button>
+        </footer>
+    </div>
+    <div id="champions-screen" class="champions-screen hidden">
+        <div class="champions-panel">
+            <div class="champions-panel-header">
+                <h1>🏆 Champions</h1>
+                <button type="button" class="champions-close-btn" id="champions-close-btn">Close</button>
+            </div>
+            <div id="champions-list"></div>
+        </div>
+    </div>
+</body>
+<script>
+    let teams = {
+        // Group A
+        'Las_Vegas_Gamblers': { name: 'Las Vegas Gamblers', group: 'A' },
+        'Houston_Hungovers': { name: 'Houston Hungovers', group: 'A' },
+        'Nashville_Neer_do_wells': { name: "Nashville Ne'er-do-wells", group: 'A' },
+        'Jacksonville_Jags': { name: 'Jacksonville Jags', group: 'A' },
+        // Group B
+        'Chicago_Grizzlies': { name: 'Chicago Grizzlies', group: 'B' },
+        'Indianapolis_Indy': { name: 'Indianapolis Indy', group: 'B' },
+        'Columbus_Cant': { name: 'Columbus Cant', group: 'B' },
+        'Philadelphia_Photos': { name: 'Philadelphia Photos', group: 'B' },
+        // Group C
+        'Seattle_Seals': { name: 'Seattle Seals', group: 'C' },
+        'Boston_Hearts': { name: 'Boston Hearts', group: 'C' },
+        'Charlotte_Cows': { name: 'Charlotte Cows', group: 'C' },
+        'Phoenix_Phantoms': { name: 'Phoenix Phantoms', group: 'C' },
+        // Group D
+        'San_Francisco_86ers': { name: "San Francisco 86'ers", group: 'D' },
+        'Louisville_Cardinals': { name: 'Louisville Cardinals', group: 'D' },
+        'San_Jose_Soccer_Team': { name: 'San Jose Soccer Team', group: 'D' },
+        'San_Diego_Zoogoers': { name: 'San Diego Zoogoers', group: 'D' },
+        // Group 1
+        'Dallas_Darts': { name: 'Dallas Darts', group: '1' },
+        'Portland_Roses': { name: 'Portland Roses', group: '1' },
+        // Group 2
+        'Oklahoma_City_Naders': { name: 'Oklahoma City Naders', group: '2' },
+        'Kansas_City_Winners': { name: 'Kansas City Winners', group: '2' },
+        // Group 3
+        'San_Antonio_Sprouts': { name: 'San Antonio Sprouts', group: '3' },
+        'Los_Angeles_Angels': { name: 'Los Angeles Angels', group: '3' },
+        // Group 4
+        'Washington_Washers': { name: 'Washington Washers', group: '4' },
+        'Detroit_Dryers': { name: 'Detroit Dryers', group: '4' },
+        // Group 5
+        'Baltimore_Poets': { name: 'Baltimore Poets', group: '5' },
+        'Denver_Dorks': { name: 'Denver Dorks', group: '5' }
+    };
+
+    let recordedMatches = {};
+    const MAJOR_GROUPS = ['A', 'B', 'C', 'D'];
+    const MINOR_GROUPS = ['1', '2', '3', '4', '5'];
+    const ALL_GROUPS = [...MAJOR_GROUPS, ...MINOR_GROUPS];
+    const STORAGE_KEY = 'soccerOverviewSeasons';
+
+    let currentYear = 1;
+    let viewingYear = 1;
+    const seasonHistory = {};
+    let liveSeasonCache = { recordedMatches: {}, playoffScores: {} };
+    let playoffScores = {};
+
+    function isArchiveView() {
+        return viewingYear < currentYear;
+    }
+
+    function deepClone(obj) {
+        return JSON.parse(JSON.stringify(obj));
+    }
+
+    function persistLiveCache() {
+        liveSeasonCache = {
+            recordedMatches: deepClone(recordedMatches),
+            playoffScores: deepClone(playoffScores)
+        };
+        saveToStorage();
+    }
+
+    function saveToStorage() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                currentYear,
+                seasonHistory,
+                liveSeasonCache
+            }));
+        } catch (e) { /* storage full or unavailable */ }
+    }
+
+    function loadFromStorage() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (data.currentYear) currentYear = data.currentYear;
+            if (data.seasonHistory) Object.assign(seasonHistory, data.seasonHistory);
+            if (data.liveSeasonCache) liveSeasonCache = data.liveSeasonCache;
+            viewingYear = currentYear;
+            recordedMatches = deepClone(liveSeasonCache.recordedMatches || {});
+            playoffScores = deepClone(liveSeasonCache.playoffScores || {});
+        } catch (e) { /* ignore corrupt storage */ }
+    }
+
+    function updateSeasonUI() {
+        document.getElementById('season-label').textContent = `Season ${viewingYear}`;
+        const modeLabel = document.getElementById('season-mode-label');
+        const nextBtn = document.getElementById('next-year-btn');
+        const lastBtn = document.getElementById('last-year-btn');
+        const archiveBanner = document.getElementById('archive-banner');
+
+        if (isArchiveView()) {
+            modeLabel.textContent = 'Archive';
+            nextBtn.textContent = viewingYear < currentYear - 1 ? 'Next Year →' : 'Return to Current →';
+            archiveBanner.classList.add('visible');
+        } else {
+            modeLabel.textContent = viewingYear === currentYear && currentYear > 1 ? 'Current' : '';
+            nextBtn.textContent = 'Next Year →';
+            archiveBanner.classList.remove('visible');
+        }
+
+        lastBtn.disabled = viewingYear <= 1;
+        document.body.classList.toggle('archive-view', isArchiveView());
+    }
+
+    function applySeasonData(data) {
+        recordedMatches = deepClone(data.recordedMatches || {});
+        playoffScores = deepClone(data.playoffScores || {});
+        createGroupStageSchedule();
+        recalculateStandings();
+        renderPlayoffBracket();
+        updateSeasonUI();
+    }
+
+    function goToLastYear() {
+        if (viewingYear <= 1) return;
+        if (viewingYear === currentYear) persistLiveCache();
+        viewingYear--;
+        applySeasonData(seasonHistory[viewingYear]);
+    }
+
+    function goToNextYear() {
+        if (viewingYear < currentYear) {
+            viewingYear++;
+            if (viewingYear === currentYear) {
+                applySeasonData(liveSeasonCache);
+            } else {
+                applySeasonData(seasonHistory[viewingYear]);
+            }
+            return;
+        }
+
+        if (!confirm(`Advance to Season ${currentYear + 1}? Current season stats will be saved and reset.`)) return;
+
+        seasonHistory[currentYear] = {
+            recordedMatches: deepClone(recordedMatches),
+            playoffScores: deepClone(playoffScores),
+            champions: {
+                major: getMajorChampionKey(),
+                minor: getMinorChampionKey()
+            }
+        };
+
+        currentYear++;
+        viewingYear = currentYear;
+        recordedMatches = {};
+        playoffScores = {};
+        liveSeasonCache = { recordedMatches: {}, playoffScores: {} };
+
+        createGroupStageSchedule();
+        recalculateStandings();
+        renderPlayoffBracket();
+        updateSeasonUI();
+        saveToStorage();
+    }
+
+    function getMajorBracketState() {
+        const seeds = getMajorPlayoffSeeds();
+        const qfPairs = [
+            [seeds[0], seeds[7]],
+            [seeds[3], seeds[4]],
+            [seeds[2], seeds[5]],
+            [seeds[1], seeds[6]]
+        ];
+        const qfWinners = qfPairs.map((pair, i) => {
+            const result = getPlayoffMatchResult(`major-qf-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+        const sfPairs = [
+            [qfWinners[0], qfWinners[1]],
+            [qfWinners[2], qfWinners[3]]
+        ];
+        const sfWinners = sfPairs.map((pair, i) => {
+            if (!pair[0] || !pair[1]) return null;
+            const result = getPlayoffMatchResult(`major-sf-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+        return { sfWinners };
+    }
+
+    function getMinorBracketState() {
+        const { topSeed, wildcards } = getMinorPlayoffSeeds();
+        const wcPairs = [
+            [wildcards[0], wildcards[3]],
+            [wildcards[1], wildcards[2]]
+        ];
+        const wcWinners = wcPairs.map((pair, i) => {
+            const result = getPlayoffMatchResult(`minor-wc-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+        const semiPair = [wcWinners[0], wcWinners[1]];
+        let semiWinner = null;
+        if (semiPair[0] && semiPair[1]) {
+            const result = getPlayoffMatchResult('minor-sf-0', semiPair[0], semiPair[1]);
+            semiWinner = result && result.complete ? result.winner : null;
+        }
+        return { topSeed, semiWinner };
+    }
+
+    function getMajorChampionKey() {
+        const { sfWinners } = getMajorBracketState();
+        if (!sfWinners[0] || !sfWinners[1]) return null;
+        const result = getPlayoffMatchResult('major-final', sfWinners[0], sfWinners[1]);
+        return result && result.complete ? result.winner : null;
+    }
+
+    function getMinorChampionKey() {
+        const { topSeed, semiWinner } = getMinorBracketState();
+        if (!topSeed || !semiWinner) return null;
+        const result = getPlayoffMatchResult('minor-final', topSeed, semiWinner);
+        return result && result.complete ? result.winner : null;
+    }
+
+    function getChampionNameForYear(year) {
+        if (year === currentYear) {
+            return {
+                major: getMajorChampionKey(),
+                minor: getMinorChampionKey()
+            };
+        }
+        const snap = seasonHistory[year];
+        return snap ? snap.champions : { major: null, minor: null };
+    }
+
+    function formatChampion(teamKey) {
+        if (!teamKey) return null;
+        return teams[teamKey] ? teams[teamKey].name : teamKey;
+    }
+
+    function renderChampionsScreen() {
+        const list = document.getElementById('champions-list');
+        list.innerHTML = '';
+
+        const years = [];
+        for (const y in seasonHistory) years.push(Number(y));
+        if (!years.includes(currentYear)) years.push(currentYear);
+        years.sort((a, b) => b - a);
+
+        if (years.length === 0) {
+            list.innerHTML = '<div class="champions-empty-msg">No seasons played yet.</div>';
+            return;
+        }
+
+        for (const year of years) {
+            const champs = getChampionNameForYear(year);
+            const majorName = formatChampion(champs.major);
+            const minorName = formatChampion(champs.minor);
+            const block = document.createElement('div');
+            block.className = 'champions-year-block' + (year === currentYear ? ' current' : '');
+            block.innerHTML = `
+                <div class="champions-year-title">Season ${year}${year === currentYear ? ' (Current)' : ''}</div>
+                <div class="champions-row">
+                    <span class="league-label">Major</span>
+                    <span class="champion-name${majorName ? '' : ' empty'}">${majorName || 'TBD'}</span>
+                </div>
+                <div class="champions-row">
+                    <span class="league-label">Minor</span>
+                    <span class="champion-name${minorName ? '' : ' empty'}">${minorName || 'TBD'}</span>
+                </div>
+            `;
+            list.appendChild(block);
+        }
+    }
+
+    function showChampionsScreen() {
+        renderChampionsScreen();
+        document.getElementById('champions-screen').classList.remove('hidden');
+    }
+
+    function hideChampionsScreen() {
+        document.getElementById('champions-screen').classList.add('hidden');
+    }
+
+    function getGroupTeamsSelector(groupLabel) {
+        if (MAJOR_GROUPS.includes(groupLabel)) {
+            return `.group-${groupLabel.toLowerCase()}-teams`;
+        }
+        return `.group-${groupLabel}-teams`;
+    }
+
+    function getGroupDisplayName(groupLabel) {
+        if (MINOR_GROUPS.includes(groupLabel)) {
+            return `Group #${groupLabel}`;
+        }
+        return `Group ${groupLabel}`;
+    }
+
+    function initTeamStats() {
+        for (const key in teams) {
+            teams[key].stats = { pts: 0, pf: 0, pa: 0, pd: 0 };
+        }
+    }
+
+    function getScheduleMatchKey(teamKey1, teamKey2) {
+        return `${teamKey1}|${teamKey2}`;
+    }
+
+    function parseScore(value) {
+        if (value === '' || value === null || value === undefined) return null;
+        const n = parseInt(value, 10);
+        if (Number.isNaN(n) || n < 0) return null;
+        return n;
+    }
+
+    function applyMatchResult(teamKey1, score1, teamKey2, score2) {
+        const t1 = teams[teamKey1].stats;
+        const t2 = teams[teamKey2].stats;
+
+        t1.pf += score1;
+        t1.pa += score2;
+        t2.pf += score2;
+        t2.pa += score1;
+
+        if (score1 > score2) {
+            t1.pts += 3;
+        } else if (score2 > score1) {
+            t2.pts += 3;
+        } else {
+            t1.pts += 1;
+            t2.pts += 1;
+        }
+
+        t1.pd = t1.pf - t1.pa;
+        t2.pd = t2.pf - t2.pa;
+    }
+
+    function recalculateStandings() {
+        initTeamStats();
+        for (const matchKey in recordedMatches) {
+            const match = recordedMatches[matchKey];
+            if (match.score1 === null || match.score2 === null) continue;
+            applyMatchResult(match.team1, match.score1, match.team2, match.score2);
+        }
+        renderStandings();
+        renderPlayoffBracket();
+    }
+
+    function renderStandings() {
+        for (const teamKey in teams) {
+            if (!ALL_GROUPS.includes(teams[teamKey].group)) continue;
+            const row = document.querySelector(`.team-row[data-team-key="${teamKey}"]`);
+            if (!row) continue;
+            const stats = teams[teamKey].stats;
+            row.querySelector('.team-points h2').textContent = stats.pts;
+            row.querySelector('.team-points-for h2').textContent = stats.pf;
+            row.querySelector('.team-points-agaisnt h2').textContent = stats.pa;
+            const pdEl = row.querySelector('.team-points-difference h2');
+            pdEl.textContent = stats.pd > 0 ? `+${stats.pd}` : stats.pd;
+        }
+
+        ALL_GROUPS.forEach(groupLabel => {
+            const container = document.querySelector(getGroupTeamsSelector(groupLabel));
+            if (!container) return;
+            const rows = Array.from(container.querySelectorAll('.team-row'));
+            rows.sort((a, b) => {
+                const sA = teams[a.dataset.teamKey].stats;
+                const sB = teams[b.dataset.teamKey].stats;
+                if (sB.pts !== sA.pts) return sB.pts - sA.pts;
+                if (sB.pd !== sA.pd) return sB.pd - sA.pd;
+                return sB.pf - sA.pf;
+            });
+            rows.forEach(row => container.appendChild(row));
+        });
+    }
+
+    function submitMatchScore(matchRow) {
+        const team1 = matchRow.dataset.team1;
+        const team2 = matchRow.dataset.team2;
+        const input1 = matchRow.querySelector('.score-home');
+        const input2 = matchRow.querySelector('.score-away');
+        const score1 = parseScore(input1.value);
+        const score2 = parseScore(input2.value);
+
+        const matchKey = getScheduleMatchKey(team1, team2);
+
+        if (score1 === null || score2 === null) {
+            delete recordedMatches[matchKey];
+            matchRow.classList.remove('completed');
+            recalculateStandings();
+            if (!isArchiveView()) persistLiveCache();
+            return;
+        }
+
+        recordedMatches[matchKey] = { team1, team2, score1, score2 };
+        matchRow.classList.add('completed');
+        recalculateStandings();
+        if (!isArchiveView()) persistLiveCache();
+    }
+
+    function attachScoreInputHandlers(matchRow) {
+        const input1 = matchRow.querySelector('.score-home');
+        const input2 = matchRow.querySelector('.score-away');
+
+        if (isArchiveView()) {
+            input1.disabled = true;
+            input2.disabled = true;
+            return;
+        }
+
+        input1.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                input2.focus();
+                input2.select();
+            }
+        });
+
+        input2.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitMatchScore(matchRow);
+                input2.blur();
+            }
+        });
+
+        input1.addEventListener('blur', () => {
+            if (input1.value !== '' && input2.value !== '') submitMatchScore(matchRow);
+        });
+        input2.addEventListener('blur', () => {
+            if (input1.value !== '' && input2.value !== '') submitMatchScore(matchRow);
+        });
+    }
+
+    function buildMatchRow(teamKey1, teamKey2, matchday) {
+        const matchKey = getScheduleMatchKey(teamKey1, teamKey2);
+        const saved = recordedMatches[matchKey];
+
+        const matchDiv = document.createElement('div');
+        matchDiv.className = 'schedule-row';
+        matchDiv.dataset.team1 = teamKey1;
+        matchDiv.dataset.team2 = teamKey2;
+        if (saved) matchDiv.classList.add('completed');
+
+        matchDiv.innerHTML = `
+            <span class="schedule-matchday">MD ${matchday}</span>
+            <div class="schedule-team-cell home">
+                <input type="number" class="schedule-score-input score-home" min="0" placeholder="-" aria-label="${teams[teamKey1].name} score">
+                <span class="schedule-team-name">${teams[teamKey1].name}</span>
+            </div>
+            <span class="schedule-vs">–</span>
+            <div class="schedule-team-cell away">
+                <input type="number" class="schedule-score-input score-away" min="0" placeholder="-" aria-label="${teams[teamKey2].name} score">
+                <span class="schedule-team-name">${teams[teamKey2].name}</span>
+            </div>
+        `;
+
+        if (saved) {
+            matchDiv.querySelector('.score-home').value = saved.score1;
+            matchDiv.querySelector('.score-away').value = saved.score2;
+        }
+
+        attachScoreInputHandlers(matchDiv);
+        return matchDiv;
+    }
+
+    function appendGroupSchedule(scheduleContainer, groupLabel, groupTeamKeys, isMinor) {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = `schedule-group schedule-group-group${groupLabel}`;
+
+        const groupTitle = document.createElement('div');
+        groupTitle.className = 'schedule-group-title' + (isMinor ? ' minor' : '');
+        groupTitle.textContent = getGroupDisplayName(groupLabel);
+        groupDiv.appendChild(groupTitle);
+
+        const n = groupTeamKeys.length;
+        let matchday = 1;
+        if (isMinor && n === 2) {
+            groupDiv.appendChild(buildMatchRow(groupTeamKeys[0], groupTeamKeys[1], matchday++));
+            groupDiv.appendChild(buildMatchRow(groupTeamKeys[1], groupTeamKeys[0], matchday++));
+        } else {
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    groupDiv.appendChild(buildMatchRow(groupTeamKeys[i], groupTeamKeys[j], matchday));
+                    matchday++;
+                }
+            }
+        }
+        scheduleContainer.appendChild(groupDiv);
+    }
+
+    function createGroupStageSchedule() {
+        const scheduleContainer = document.querySelector('.schedule-container');
+        if (!scheduleContainer) return;
+
+        scheduleContainer.innerHTML = '<h1>Schedule</h1>';
+
+        const groups = {};
+        for (const teamKey in teams) {
+            const group = teams[teamKey].group;
+            if (!groups[group]) groups[group] = [];
+            groups[group].push(teamKey);
+        }
+
+        const majorLabel = document.createElement('div');
+        majorLabel.className = 'schedule-section-label';
+        majorLabel.textContent = 'Major League';
+        scheduleContainer.appendChild(majorLabel);
+
+        for (const groupLabel of MAJOR_GROUPS) {
+            const groupTeamKeys = groups[groupLabel];
+            if (!groupTeamKeys) continue;
+            appendGroupSchedule(scheduleContainer, groupLabel, groupTeamKeys, false);
+        }
+
+        const minorLabel = document.createElement('div');
+        minorLabel.className = 'schedule-section-label';
+        minorLabel.textContent = 'Minor League';
+        scheduleContainer.appendChild(minorLabel);
+
+        for (const groupLabel of MINOR_GROUPS) {
+            const groupTeamKeys = groups[groupLabel];
+            if (!groupTeamKeys) continue;
+            appendGroupSchedule(scheduleContainer, groupLabel, groupTeamKeys, true);
+        }
+    }
+
+    function createTeamRow(teamKey) {
+        const group = teams[teamKey].group;
+        const teamDiv = document.createElement('div');
+        teamDiv.className = `team-row group-${MAJOR_GROUPS.includes(group) ? group.toLowerCase() : group}-team`;
+        teamDiv.dataset.teamKey = teamKey;
+
+        const teamDivName = document.createElement('div');
+        teamDivName.className = 'team-name';
+        teamDivName.title = teams[teamKey].name;
+        teamDivName.innerHTML = `<h2>${teams[teamKey].name}</h2>`;
+
+        const teamDivStats = document.createElement('div');
+        teamDivStats.className = 'team-stats';
+
+        const teamDivPoints = document.createElement('div');
+        teamDivPoints.className = 'team-points';
+        teamDivPoints.innerHTML = '<h2>0</h2>';
+
+        const teamDivPointsFor = document.createElement('div');
+        teamDivPointsFor.className = 'team-points-for';
+        teamDivPointsFor.innerHTML = '<h2>0</h2>';
+
+        const teamDivPointsAgainst = document.createElement('div');
+        teamDivPointsAgainst.className = 'team-points-agaisnt';
+        teamDivPointsAgainst.innerHTML = '<h2>0</h2>';
+
+        const teamDivPointsDifference = document.createElement('div');
+        teamDivPointsDifference.className = 'team-points-difference';
+        teamDivPointsDifference.innerHTML = '<h2>0</h2>';
+
+        teamDivStats.append(teamDivPoints, teamDivPointsFor, teamDivPointsAgainst, teamDivPointsDifference);
+        teamDiv.append(teamDivName, teamDivStats);
+        return teamDiv;
+    }
+
+    function createTeamStandings() {
+        for (const teamKey in teams) {
+            if (!ALL_GROUPS.includes(teams[teamKey].group)) continue;
+            const container = document.querySelector(getGroupTeamsSelector(teams[teamKey].group));
+            container.append(createTeamRow(teamKey));
+        }
+    }
+
+    let playoffView = 'major';
+
+    function compareTeamStats(teamKeyA, teamKeyB) {
+        const sA = teams[teamKeyA].stats;
+        const sB = teams[teamKeyB].stats;
+        if (sB.pts !== sA.pts) return sB.pts - sA.pts;
+        if (sB.pd !== sA.pd) return sB.pd - sA.pd;
+        return sB.pf - sA.pf;
+    }
+
+    function getTeamsInGroup(groupLabel) {
+        return Object.keys(teams)
+            .filter(key => teams[key].group === groupLabel)
+            .sort(compareTeamStats);
+    }
+
+    function getMajorPlayoffSeeds() {
+        const qualifiers = [];
+        for (const groupLabel of MAJOR_GROUPS) {
+            const ranked = getTeamsInGroup(groupLabel);
+            qualifiers.push(ranked[0], ranked[1]);
+        }
+        return qualifiers.sort(compareTeamStats);
+    }
+
+    function getMinorPlayoffSeeds() {
+        const groupWinners = [];
+        for (const groupLabel of MINOR_GROUPS) {
+            const ranked = getTeamsInGroup(groupLabel);
+            groupWinners.push(ranked[0]);
+        }
+        groupWinners.sort(compareTeamStats);
+        return {
+            topSeed: groupWinners[0],
+            wildcards: groupWinners.slice(1)
+        };
+    }
+
+    function getPlayoffMatchResult(matchId, teamKey1, teamKey2) {
+        const saved = playoffScores[matchId];
+        if (!saved) return null;
+        const teamsMatch =
+            (saved.team1 === teamKey1 && saved.team2 === teamKey2) ||
+            (saved.team1 === teamKey2 && saved.team2 === teamKey1);
+        if (!teamsMatch) return null;
+        if (saved.score1 === null || saved.score2 === null) return null;
+
+        const score1 = saved.team1 === teamKey1 ? saved.score1 : saved.score2;
+        const score2 = saved.team1 === teamKey1 ? saved.score2 : saved.score1;
+
+        if (score1 > score2) return { winner: teamKey1, score1, score2, complete: true };
+        if (score2 > score1) return { winner: teamKey2, score1, score2, complete: true };
+        return { winner: null, score1, score2, complete: false };
+    }
+
+    function savePlayoffScore(matchId, teamKey1, teamKey2, score1, score2) {
+        if (isArchiveView()) return;
+        if (score1 === null || score2 === null) {
+            delete playoffScores[matchId];
+        } else {
+            playoffScores[matchId] = { team1: teamKey1, team2: teamKey2, score1, score2 };
+        }
+        renderPlayoffBracket();
+        persistLiveCache();
+    }
+
+    function attachPlayoffScoreHandlers(matchEl, matchId, teamKey1, teamKey2) {
+        const input1 = matchEl.querySelector('.score-home');
+        const input2 = matchEl.querySelector('.score-away');
+        if (!input1 || !input2) return;
+
+        if (isArchiveView()) {
+            input1.disabled = true;
+            input2.disabled = true;
+            return;
+        }
+
+        const submit = () => {
+            savePlayoffScore(matchId, teamKey1, teamKey2, parseScore(input1.value), parseScore(input2.value));
+        };
+
+        input1.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                input2.focus();
+                input2.select();
+            }
+        });
+        input2.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submit();
+                input2.blur();
+            }
+        });
+        input1.addEventListener('blur', () => {
+            if (input1.value !== '' && input2.value !== '') submit();
+        });
+        input2.addEventListener('blur', () => {
+            if (input1.value !== '' && input2.value !== '') submit();
+        });
+    }
+
+    function getSeedFromList(teamKey, seedList) {
+        if (!teamKey) return null;
+        const idx = seedList.indexOf(teamKey);
+        return idx >= 0 ? idx + 1 : null;
+    }
+
+    function buildBracketTeamLine(teamKey, seed, extraClass, showBye) {
+        const cls = `bracket-team-line${extraClass ? ` ${extraClass}` : ''}`;
+        const seedHtml = seed != null ? `<span class="bracket-seed">${seed}</span>` : '';
+        const byeHtml = showBye ? '<span class="bracket-bye-tag">Bye</span>' : '';
+        return `
+            <div class="${cls}">
+                ${seedHtml}
+                <span class="bracket-team-name" title="${teams[teamKey].name}">${teams[teamKey].name}</span>
+                ${byeHtml}
+            </div>
+        `;
+    }
+
+    function buildBracketMatch(matchId, teamKey1, teamKey2, label, seed1, seed2) {
+        const matchEl = document.createElement('div');
+        matchEl.className = 'bracket-match';
+
+        if (!teamKey1 && !teamKey2) {
+            matchEl.innerHTML = `
+                <div class="bracket-match-label">${label}</div>
+                <div class="bracket-team-line tbd"><span class="bracket-team-name">TBD</span></div>
+                <div class="bracket-team-line tbd"><span class="bracket-team-name">TBD</span></div>
+            `;
+            return matchEl;
+        }
+
+        if (!teamKey1 || !teamKey2) {
+            matchEl.classList.add('partial');
+            const team1Bye = matchId === 'minor-final' && teamKey1 && !teamKey2;
+            matchEl.innerHTML = `
+                <div class="bracket-match-label">${label}</div>
+                ${teamKey1
+                    ? buildBracketTeamLine(teamKey1, seed1, 'advanced', team1Bye)
+                    : '<div class="bracket-team-line tbd"><span class="bracket-team-name">TBD</span></div>'}
+                ${teamKey2
+                    ? buildBracketTeamLine(teamKey2, seed2, 'advanced')
+                    : '<div class="bracket-team-line tbd"><span class="bracket-team-name">TBD</span></div>'}
+            `;
+            return matchEl;
+        }
+
+        const saved = playoffScores[matchId];
+        const teamsMatch = saved &&
+            ((saved.team1 === teamKey1 && saved.team2 === teamKey2) ||
+             (saved.team1 === teamKey2 && saved.team2 === teamKey1));
+        const result = getPlayoffMatchResult(matchId, teamKey1, teamKey2);
+        if (result && result.complete) matchEl.classList.add('completed');
+
+        const score1Val = teamsMatch
+            ? (saved.team1 === teamKey1 ? saved.score1 : saved.score2)
+            : '';
+        const score2Val = teamsMatch
+            ? (saved.team1 === teamKey1 ? saved.score2 : saved.score1)
+            : '';
+
+        const team1Winner = result && result.winner === teamKey1;
+        const team2Winner = result && result.winner === teamKey2;
+
+        matchEl.innerHTML = `
+            <div class="bracket-match-label">${label}</div>
+            <div class="bracket-team-line${team1Winner ? ' winner' : ''}">
+                ${seed1 != null ? `<span class="bracket-seed">${seed1}</span>` : ''}
+                <span class="bracket-team-name" title="${teams[teamKey1].name}">${teams[teamKey1].name}</span>
+                <input type="number" class="bracket-score-input score-home" min="0" placeholder="-" value="${score1Val !== '' ? score1Val : ''}" aria-label="${teams[teamKey1].name} score">
+            </div>
+            <div class="bracket-team-line${team2Winner ? ' winner' : ''}">
+                ${seed2 != null ? `<span class="bracket-seed">${seed2}</span>` : ''}
+                <span class="bracket-team-name" title="${teams[teamKey2].name}">${teams[teamKey2].name}</span>
+                <input type="number" class="bracket-score-input score-away" min="0" placeholder="-" value="${score2Val !== '' ? score2Val : ''}" aria-label="${teams[teamKey2].name} score">
+            </div>
+        `;
+
+        attachPlayoffScoreHandlers(matchEl, matchId, teamKey1, teamKey2);
+        return matchEl;
+    }
+
+    function buildBracketRound(title, matches) {
+        const round = document.createElement('div');
+        round.className = 'bracket-round';
+        const roundTitle = document.createElement('div');
+        roundTitle.className = 'bracket-round-title';
+        roundTitle.textContent = title;
+        round.appendChild(roundTitle);
+        matches.forEach(match => round.appendChild(match));
+        return round;
+    }
+
+    function renderMajorBracket(container) {
+        const seeds = getMajorPlayoffSeeds();
+        const note = document.createElement('div');
+        note.className = 'bracket-seed-note';
+        note.textContent = 'Top 2 from each group qualify. Standard 8-team single elimination (1v8, 4v5, 3v6, 2v7).';
+        container.appendChild(note);
+
+        const qfPairs = [
+            [seeds[0], seeds[7]],
+            [seeds[3], seeds[4]],
+            [seeds[2], seeds[5]],
+            [seeds[1], seeds[6]]
+        ];
+
+        const qfWinners = qfPairs.map((pair, i) => {
+            const result = getPlayoffMatchResult(`major-qf-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+
+        const sfPairs = [
+            [qfWinners[0], qfWinners[1]],
+            [qfWinners[2], qfWinners[3]]
+        ];
+
+        const sfWinners = sfPairs.map((pair, i) => {
+            if (!pair[0] || !pair[1]) return null;
+            const result = getPlayoffMatchResult(`major-sf-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+
+        const layout = document.createElement('div');
+        layout.className = 'bracket-layout';
+
+        const qfRound = buildBracketRound('Quarterfinals', qfPairs.map((pair, i) =>
+            buildBracketMatch(
+                `major-qf-${i}`, pair[0], pair[1], `QF ${i + 1}`,
+                seeds.indexOf(pair[0]) + 1, seeds.indexOf(pair[1]) + 1
+            )
+        ));
+        layout.appendChild(qfRound);
+
+        layout.appendChild(Object.assign(document.createElement('div'), { className: 'bracket-connector-col', textContent: '→' }));
+
+        const sfRound = buildBracketRound('Semifinals', sfPairs.map((pair, i) =>
+            buildBracketMatch(
+                `major-sf-${i}`, pair[0], pair[1], `SF ${i + 1}`,
+                getSeedFromList(pair[0], seeds), getSeedFromList(pair[1], seeds)
+            )
+        ));
+        layout.appendChild(sfRound);
+
+        layout.appendChild(Object.assign(document.createElement('div'), { className: 'bracket-connector-col', textContent: '→' }));
+
+        const finalRound = buildBracketRound('Championship', [
+            buildBracketMatch(
+                'major-final', sfWinners[0], sfWinners[1], 'Final',
+                getSeedFromList(sfWinners[0], seeds), getSeedFromList(sfWinners[1], seeds)
+            )
+        ]);
+        layout.appendChild(finalRound);
+
+        container.appendChild(layout);
+    }
+
+    function renderMinorBracket(container) {
+        const { topSeed, wildcards } = getMinorPlayoffSeeds();
+        const note = document.createElement('div');
+        note.className = 'bracket-seed-note';
+        note.textContent = 'Group winners qualify. #1 seed gets a bye to the Championship. Seeds 2–5 play Wild Card games, then Semifinal, then Final.';
+        container.appendChild(note);
+
+        const wcPairs = [
+            [wildcards[0], wildcards[3]],
+            [wildcards[1], wildcards[2]]
+        ];
+
+        const wcWinners = wcPairs.map((pair, i) => {
+            const result = getPlayoffMatchResult(`minor-wc-${i}`, pair[0], pair[1]);
+            return result && result.complete ? result.winner : null;
+        });
+
+        const semiPair = [wcWinners[0], wcWinners[1]];
+        const semiWinner = (() => {
+            if (!semiPair[0] || !semiPair[1]) return null;
+            const result = getPlayoffMatchResult('minor-sf-0', semiPair[0], semiPair[1]);
+            return result && result.complete ? result.winner : null;
+        })();
+
+        const layout = document.createElement('div');
+        layout.className = 'bracket-layout';
+
+        const allMinorSeeds = [topSeed, ...wildcards];
+        const wcRound = buildBracketRound('Wild Card', wcPairs.map((pair, i) =>
+            buildBracketMatch(
+                `minor-wc-${i}`, pair[0], pair[1], `WC ${i + 1}`,
+                allMinorSeeds.indexOf(pair[0]) + 1, allMinorSeeds.indexOf(pair[1]) + 1
+            )
+        ));
+        layout.appendChild(wcRound);
+
+        layout.appendChild(Object.assign(document.createElement('div'), { className: 'bracket-connector-col', textContent: '→' }));
+
+        const sfRound = buildBracketRound('Semifinal', [
+            buildBracketMatch(
+                'minor-sf-0', semiPair[0], semiPair[1], 'Semifinal',
+                getSeedFromList(semiPair[0], allMinorSeeds), getSeedFromList(semiPair[1], allMinorSeeds)
+            )
+        ]);
+        layout.appendChild(sfRound);
+
+        layout.appendChild(Object.assign(document.createElement('div'), { className: 'bracket-connector-col', textContent: '→' }));
+
+        const finalRound = buildBracketRound('Championship', [
+            buildBracketMatch(
+                'minor-final', topSeed, semiWinner, 'Championship',
+                1, getSeedFromList(semiWinner, allMinorSeeds)
+            )
+        ]);
+        layout.appendChild(finalRound);
+
+        container.appendChild(layout);
+    }
+
+    function renderPlayoffBracket() {
+        const container = document.getElementById('bracket-content');
+        if (!container) return;
+        container.innerHTML = '';
+
+        if (playoffView === 'major') {
+            renderMajorBracket(container);
+        } else {
+            renderMinorBracket(container);
+        }
+    }
+
+    function setPlayoffView(view) {
+        playoffView = view;
+        const majorBtn = document.getElementById('bracket-major-btn');
+        const minorBtn = document.getElementById('bracket-minor-btn');
+        majorBtn.classList.toggle('active', view === 'major');
+        majorBtn.classList.remove('minor-active');
+        minorBtn.classList.toggle('active', view === 'minor');
+        minorBtn.classList.toggle('minor-active', view === 'minor');
+        renderPlayoffBracket();
+    }
+
+    document.getElementById('bracket-major-btn').addEventListener('click', () => setPlayoffView('major'));
+    document.getElementById('bracket-minor-btn').addEventListener('click', () => setPlayoffView('minor'));
+    document.getElementById('last-year-btn').addEventListener('click', goToLastYear);
+    document.getElementById('next-year-btn').addEventListener('click', goToNextYear);
+    document.getElementById('champions-btn').addEventListener('click', showChampionsScreen);
+    document.getElementById('champions-close-btn').addEventListener('click', hideChampionsScreen);
+    document.getElementById('champions-screen').addEventListener('click', (e) => {
+        if (e.target.id === 'champions-screen') hideChampionsScreen();
+    });
+
+    initTeamStats();
+    createTeamStandings();
+    loadFromStorage();
+    createGroupStageSchedule();
+    recalculateStandings();
+    updateSeasonUI();
+    renderPlayoffBracket();
+</script>
+</html>
